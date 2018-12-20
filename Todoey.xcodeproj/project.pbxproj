@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5386A1EB21CB2671007BA600 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5386A1EA21CB2671007BA600 /* AppDelegate.swift */; };
-		5386A1ED21CB2671007BA600 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5386A1EC21CB2671007BA600 /* ViewController.swift */; };
+		5386A1ED21CB2671007BA600 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5386A1EC21CB2671007BA600 /* TodoListViewController.swift */; };
 		5386A1F021CB2671007BA600 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5386A1EE21CB2671007BA600 /* Main.storyboard */; };
 		5386A1F221CB2672007BA600 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5386A1F121CB2672007BA600 /* Assets.xcassets */; };
 		5386A1F521CB2672007BA600 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5386A1F321CB2672007BA600 /* LaunchScreen.storyboard */; };
@@ -17,7 +17,7 @@
 /* Begin PBXFileReference section */
 		5386A1E721CB2671007BA600 /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5386A1EA21CB2671007BA600 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5386A1EC21CB2671007BA600 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5386A1EC21CB2671007BA600 /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		5386A1EF21CB2671007BA600 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5386A1F121CB2672007BA600 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5386A1F421CB2672007BA600 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				5386A1EA21CB2671007BA600 /* AppDelegate.swift */,
-				5386A1EC21CB2671007BA600 /* ViewController.swift */,
+				5386A1EC21CB2671007BA600 /* TodoListViewController.swift */,
 				5386A1EE21CB2671007BA600 /* Main.storyboard */,
 				5386A1F121CB2672007BA600 /* Assets.xcassets */,
 				5386A1F321CB2672007BA600 /* LaunchScreen.storyboard */,
@@ -135,7 +135,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5386A1ED21CB2671007BA600 /* ViewController.swift in Sources */,
+				5386A1ED21CB2671007BA600 /* TodoListViewController.swift in Sources */,
 				5386A1EB21CB2671007BA600 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,6 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZQ7VACGNL8;
 				INFOPLIST_FILE = Todoey/Info.plist;
@@ -289,8 +290,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = self.edu.Frank.Todoey;
+				PRODUCT_BUNDLE_IDENTIFIER = self.edu.Frank;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -300,6 +302,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZQ7VACGNL8;
 				INFOPLIST_FILE = Todoey/Info.plist;
@@ -307,8 +310,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = self.edu.Frank.Todoey;
+				PRODUCT_BUNDLE_IDENTIFIER = self.edu.Frank;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
