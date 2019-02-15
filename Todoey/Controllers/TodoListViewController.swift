@@ -7,11 +7,14 @@
 //
 
 import UIKit
-import CoreData
+// used for CoreData only...import CoreData
+
+import RealmSwift
 
 class TodoListViewController: UITableViewController {
     /* We need to initialize itemArray with all of the items that belong to the category that was selected. */
     var itemArray = [Item]()
+    let realm = try! Realm()
     
     /* Category? because it will be Nil until you make up a category & set it in the CatVC Delegate Method. */
     var selectedCategory : Category? {
@@ -24,7 +27,8 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    //Above is used for CoreData method
     //Above we have a shared singleton object which refers to current app as an object
     //We now have access to our AppDelegate as an object.
     override func viewDidLoad() {
@@ -85,12 +89,12 @@ class TodoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Todoey item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            
-            let newItem = Item(context: self.context)
-            newItem.title = textField.text!
-            newItem.done = false
-            newItem.parentCategory = self.selectedCategory /* parentCategory was created in DataModel.*/
-            self.itemArray.append(newItem)
+ //previously from CoreData
+//            let newItem = Item(context: self.context)
+//            newItem.title = textField.text!
+//            newItem.done = false
+//            newItem.parentCategory = self.selectedCategory /* parentCategory was created in DataModel.*/
+//            self.itemArray.append(newItem)
             
             self.saveItems()
             
@@ -119,30 +123,31 @@ class TodoListViewController: UITableViewController {
         }
         self.tableView.reloadData()
     }
+    /* THIS IS ALL LEFT OVER FROM CoreData. */
     /* To tighten code we have changed loadItems(...) to take a parameter of type NSFetchRequest that returns an array of Items. There is an external parameter 'with' that is used outside this function and the internal parameter which is used here called 'request'. Also note that we need a default value '= Item.fetchRequest())' so that we can call loadItems() way above with no parameter at all in the call.*/
     /* Now we are searching among categories so we need to add an additional parameter ...predicate.
      We can still call loadItems with no parameter because we have made the predicate an optional. Note below = Item.fetchRequest() is the default value when no parameters are given such as loadItems(). */
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(),predicate: NSPredicate? = nil) {
-        /* We need to query our database and filter the results based on parent category that was selected. */
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-        /* Now add the predicate to the request. But we coud possibly unwrap a nil value so we need optional binding with follows the commented out codelines below*/
-        //        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate])
-        //
-        //        request.predicate = compoundPredicate
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-        } else {
-            request.predicate = categoryPredicate
-        }
-        
-        
-        do {
-            itemArray =  try context.fetch(request)
-        } catch {
-            print("Error saving data from context \(error)")
-        }
-        tableView.reloadData()
-    }
+//    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(),predicate: NSPredicate? = nil) {
+//        /* We need to query our database and filter the results based on parent category that was selected. */
+//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+//        /* Now add the predicate to the request. But we coud possibly unwrap a nil value so we need optional binding with follows the commented out codelines below*/
+//        //        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate])
+//        //
+//        //        request.predicate = compoundPredicate
+//        if let additionalPredicate = predicate {
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+//        } else {
+//            request.predicate = categoryPredicate
+//        }
+//
+//
+//        do {
+//            itemArray =  try context.fetch(request)
+//        } catch {
+//            print("Error saving data from context \(error)")
+//        }
+//        tableView.reloadData()
+//    }
     
     
 }
@@ -150,51 +155,51 @@ class TodoListViewController: UITableViewController {
 
 /*extension extends the viewcontroller to handle Bar methods
  This helps modularize things making them easier to debug our code */
-extension TodoListViewController: UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        //To read from the context we need a request that will return an array of Items
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
-        
-        /*We need to specify now what our query (filter) will be. To do the query we need an NSPedicate method. */
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        /*Above states that for all the items in the itemArray, look for the ones where the title of the item contains %@. "%@" represents the attribute searchBar.text. [cd] makes it Case Diacritic Insensitive. Now we have structured our query and then we add the query to our request. */
-        
-        
-        /* Now we want to sort the data we get back from the database in any order of our choice. */
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        /* Also above we add the sortDescriptorS. (plural naming because it contains an array of sort descriptors). That's why we have square brackets */
-        
-        /* Next we use the same do catch block as in loadItems() above*/
-        //        do {
-        //            itemArray =  try context.fetch(request)
-        //        } catch {
-        //            print("Error saving data from context \(error)")  }
-        /* So the results of our query are put in the itemArray */
-        
-        /* Here the external parameter 'with' is used.*/
-        
-        loadItems(with: request, predicate: predicate)
-    }
-    
-    /* The above do catch block is now simply replaced with loadItems(NSFetchRequest) which contains all the request assignments which breaks down to loadItems(request: request) which doesn't really make a lot of sense in English so we use an external parameter 'with' in addition to the internal 'request' parameter inside the loadItems function a ways above.*/
-    /* Then we need to reload the tableview to see the results in the tableview */
-    /*       tableView.reloadData()  changed because it now is containes in loadItems(with: request) */
-    
-    /* Now we need to detect when the cancel button in the search bar is selected
-     We use 'textDidChange' but triggers every time any letter is entered. We need to specify specifically when cancel icon is the at the end of the textfield.
-     */
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            loadItems()
-            /*Get the dispatch on the main cue and run resignFirstResponder on the main cue. */
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-            
-            /*Above asks the object (searchBar) to relinquish status as FirstResponder so that the cursor and keyboard both go away.
-             So go back to the original state in the background. */
-            /* We usually want to run lengthy processes in the Background Thread and not on the Main Thread so our app doesn't have to wait. When the Background Thread completes the results are then passed back to the main thread. But we need to grab the main thread in this case even though background processes are running so that we can dismiss the search bar focus. To do that we need the dispatch cue.*/
-        }
-    }
-}
+//extension TodoListViewController: UISearchBarDelegate {
+//
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        //To read from the context we need a request that will return an array of Items
+//        let request : NSFetchRequest<Item> = Item.fetchRequest()
+//
+//        /*We need to specify now what our query (filter) will be. To do the query we need an NSPedicate method. */
+//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//        /*Above states that for all the items in the itemArray, look for the ones where the title of the item contains %@. "%@" represents the attribute searchBar.text. [cd] makes it Case Diacritic Insensitive. Now we have structured our query and then we add the query to our request. */
+//
+//
+//        /* Now we want to sort the data we get back from the database in any order of our choice. */
+//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//        /* Also above we add the sortDescriptorS. (plural naming because it contains an array of sort descriptors). That's why we have square brackets */
+//
+//        /* Next we use the same do catch block as in loadItems() above*/
+//        //        do {
+//        //            itemArray =  try context.fetch(request)
+//        //        } catch {
+//        //            print("Error saving data from context \(error)")  }
+//        /* So the results of our query are put in the itemArray */
+//
+//        /* Here the external parameter 'with' is used.*/
+//
+//        loadItems(with: request, predicate: predicate)
+//    }
+//
+//    /* The above do catch block is now simply replaced with loadItems(NSFetchRequest) which contains all the request assignments which breaks down to loadItems(request: request) which doesn't really make a lot of sense in English so we use an external parameter 'with' in addition to the internal 'request' parameter inside the loadItems function a ways above.*/
+//    /* Then we need to reload the tableview to see the results in the tableview */
+//    /*       tableView.reloadData()  changed because it now is containes in loadItems(with: request) */
+//
+//    /* Now we need to detect when the cancel button in the search bar is selected
+//     We use 'textDidChange' but triggers every time any letter is entered. We need to specify specifically when cancel icon is the at the end of the textfield.
+//     */
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        if searchBar.text?.count == 0 {
+//            loadItems()
+//            /*Get the dispatch on the main cue and run resignFirstResponder on the main cue. */
+//            DispatchQueue.main.async {
+//                searchBar.resignFirstResponder()
+//            }
+//
+//            /*Above asks the object (searchBar) to relinquish status as FirstResponder so that the cursor and keyboard both go away.
+//             So go back to the original state in the background. */
+//            /* We usually want to run lengthy processes in the Background Thread and not on the Main Thread so our app doesn't have to wait. When the Background Thread completes the results are then passed back to the main thread. But we need to grab the main thread in this case even though background processes are running so that we can dismiss the search bar focus. To do that we need the dispatch cue.*/
+//        }
+//    }
+//}
