@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreData
+/*import CoreData....no longer needed*/
 import RealmSwift
 
 
@@ -18,15 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+/*We will UN-comment the following line when we need to find the filepath*/
+//        print(Realm.Configuration.defaultConfiguration.fileURL)
         
 //        let data = Data()
 //        data.name = "Frank"
 //        data.age = 65
         
         do {
-            let realm = try Realm()
+/*We change this to an underscore because it is not being used right now  ...          let realm = try Realm()*/
+     _ = try Realm()
 //           try realm.write {
 //                realm.add(data)
 //            }
@@ -38,41 +39,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        
-        self.saveContext()
-    }
+/* Left over from CoreData */
+//    func applicationWillTerminate(_ application: UIApplication) {
+//
+//        self.saveContext()
+//    }
     
     // MARK: - Core Data stack
     // Container is a SQL database
-    lazy var persistentContainer: NSPersistentContainer = {
-        
-        let container = NSPersistentContainer(name: "DataModel")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-               
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container //returns value of container into persistentContainer var object
-    }()
+//    lazy var persistentContainer: NSPersistentContainer = {
     
-    // MARK: - Core Data Saving support
-    // Saves the data (context) after our app has terminated
-    // Context is the staging area for changes that can be undone or changed.
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save() //Saves the context to the container for permanent storage
-            } catch {
-                
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
+//        let container = NSPersistentContainer(name: "DataModel")
+//        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+//            if let error = error as NSError? {
+//
+//                fatalError("Unresolved error \(error), \(error.userInfo)")
+//            }
+//        })
+//        return container //returns value of container into persistentContainer var object
+//    }()
+//
+//    // MARK: - Core Data Saving support
+//    // Saves the data (context) after our app has terminated
+//    // Context is the staging area for changes that can be undone or changed.
+//    func saveContext () {
+//        let context = persistentContainer.viewContext
+//        if context.hasChanges {
+//            do {
+//                try context.save() //Saves the context to the container for permanent storage
+//            } catch {
+//
+//                let nserror = error as NSError
+//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//            }
+//        }
+//    }
 
 
 

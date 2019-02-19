@@ -8,11 +8,17 @@
 
 import Foundation
 import RealmSwift
-
+/* Remember that the Object class is a Realm Object so making Category inherit from this class means that Category objects use Realm to CRUD. (save etc.)*/
 class Category : Object {
-    @objc dynamic var name : String = ""
-   
+    /*Remember that dynamic above means that we can monitor for changes in the property while the app is running.*/
     
+    @objc dynamic var name : String = ""
+    /*    let items = List<Item>... is the forward relationship*/
+    let items  = List<Item>()
+}
+    /* The inverse relationship of Category is defined in the Item.swift file and we create the relationship ourselves. */
+    
+
     /*List is a Realm data collection type. We initialize it as holding Item type objects*/
     /* Let's give some syntactic examples to clarify using collection type declarations...
      let array = [1,2,3]...This is type inference of integers.
@@ -21,11 +27,8 @@ class Category : Object {
      let array : Array<Int> = [1,2,3]...same as before but the type is a collection type Array containing integers 1 2 and 3 in that order.
      All these expressions above are valid.
      You can also declare an empty array of integers as...
-     let array = Array<Int>()
+     let array = Array<Int>()*/
      
-     let items = List<Item>... is the forward relationship*/
-     let items  = List<Item>()
-    
-    /* The inverse relationship of Category is defined in the Item.swift file and we create the relationship ourselves. */
-    }
+
+
 

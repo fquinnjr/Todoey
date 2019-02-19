@@ -11,14 +11,14 @@ import RealmSwift
 
 
 class CategoryViewController: UITableViewController {
-  /* We initialize a new Realm object. */
+  /* We initialize a new Realm object, which serves as an access point to our Realm database */
     let realm = try! Realm()
     
-/* Results is an auto-updating container type in Realm returned from Object queries. */
+
  /* Force unwrap is not safe so we turn categories into an optional instead of...
     var categories : Results<Category>!...*/
     var categories: Results<Category>?
-    
+    /* Results is an auto-updating container type in Realm returned from Object queries. So we don't use arrays anymore as we did in CoreData. */
     
     /* The context communicates with our persistent container. It makes CRUD possible. BUT NOW WE DON'T NEED CONTEXT WHEN USING Realm.
      let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext. */
@@ -26,7 +26,7 @@ class CategoryViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+ /*We load up all the categories that we currently have. (See loadCategories function.)*/
         loadCategories()
     }
     
@@ -75,7 +75,7 @@ class CategoryViewController: UITableViewController {
     //MARK: - Data Manipulation Methods
     
     func save(category: Category) {
-        
+ /*We pass in the new Category that was created into the save function*/
         do {
  /* old CoreData method to commit to permanent storage...
                        try context.save()
@@ -97,19 +97,19 @@ class CategoryViewController: UITableViewController {
 /* A single line will replace all the above CoreData code when using Realm. The following syntax pulls out ALL of the items inside our Realm that are Category objects. Note that categories is a Results collection type and it is not very easily converted so we will change the datatype of our Category. */
         
         categories = realm.objects(Category.self)
-  /*      A single line will replace all the above CoreData code when using Realm.*/
-        
-//previous code from CoreData
+  /*      The single line above replaces all the CoreData code by using Realm.
+         It basically says look inside our Realm and return all the objects that are of the Category type and assign it to categories.*/
+        tableView.reloadData()
+/*The above line calls all the TableView Datasource methods again. */
+    }
+//previous code from CoreData was used above instead of Realm.
 //        let request : NSFetchRequest<Category> = Category.fetchRequest()
 //        do {
 //            categories = try context.fetch(request)
 //        } catch {
 //            print("Error loading Categories \(error)")
 //        }
-//        tableView.reloadData()
-
-
-    }
+       
     
     
     
@@ -137,7 +137,7 @@ class CategoryViewController: UITableViewController {
             
             /* saveCategories was previously used to save the context (we don't need context with Realm) */
             self.save(category: newCategory)
-            
+    /*The save function above uses the write and add methods which are Realm methods. */
             
             
         }
