@@ -53,7 +53,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         
         return options
     }
-    //MARK: New update model func
+    //MARK: New update model func. This is needed because our superclass can't know anything about it's child classes so we must create a seperate func that our child classes can call to update the data.
 /*Remember 'at' is the external parameter and 'indexPath' is the internal parameter. */
     func updateModel(at indexPath:IndexPath) {
       //update our data Model

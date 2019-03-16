@@ -7,14 +7,12 @@
 //
 
 import UIKit
-// used for CoreData only...import CoreData
+
 
 import RealmSwift
 
 class TodoListViewController: SwipeTableViewController {
-    /* We need to initialize itemArray with all of the items that belong to the category that was selected (for old CoreData method), BUT now for Realm we must give the array the Results datatype containing an array of item objects.
-     We will change the name itemArray because it is now a Results container.
-     So we replace... var todoItems = [Item]()...with the following...  */
+   
     var todoItems : Results<Item>?
     
     let realm = try! Realm()
@@ -49,7 +47,7 @@ class TodoListViewController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
    /*Now that we are inheriting from the SwipeViewCell so we need to use the superclass's cell instead so the following is taken out...
-       let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) ...and replaced with...*/
+       let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) ...the dequeue is now inhereited from the superclass so replace with...*/
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         /* We now use optional binding below */
         
@@ -84,25 +82,6 @@ class TodoListViewController: SwipeTableViewController {
         }
 /* tableView.reloadData() calls the cellForRowAtindexPath method again to update our cells based on the done property.*/
         tableView.reloadData()
-        
-        
-        
-        
- //MARK: Old CoreData Method of persistent storage
-        /* We can delete a value but we must first remove it from our context (Temporary scratchpad) below...*/
-        //#####    context.delete(itemArray[indexPath.row])
-        /* Remember that itemArray[indexPath.row] is an NSManagedObject that we are deleting above.
-         But remember that we still are only deleting it from our context.
-         We can't reverse these 2 lines because indexpath.row would be changed before we had a chance to remove the context using indexpath.row as a reference */
-        
-        //####       itemArray.remove(at: indexPath.row)
-        
-        /* Still, the above merely updates our itemArray which is used to populate our tableview
-         It takes effect after 'self.tableView.reloadData()' below.
-         It does nothing to update our core data. We must still Save the context to commit them to our persistent container This is done 2 lines down in the saveItems() function which contains 'context.save()' And then later on in saveItems() we execute tableView.reload. After that we actually SEE the change in the tableview */
-        
-//        todoItems[indexPath.row].done = !todoItems[indexPath.row].done
-//        saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -159,38 +138,18 @@ class TodoListViewController: SwipeTableViewController {
 //        }
 //        self.tableView.reloadData()
 //    }
-    /* THIS IS ALL LEFT OVER FROM CoreData. */
-    /* To tighten code we have changed loadItems(...) to take a parameter of type NSFetchRequest that returns an array of Items. There is an external parameter 'with' that is used outside this function and the internal parameter which is used here called 'request'. Also note that we need a default value '= Item.fetchRequest())' so that we can call loadItems() way above with no parameter at all in the call.*/
-    /* Now we are searching among categories so we need to add an additional parameter ...predicate.
-     We can still call loadItems with no parameter because we have made the predicate an optional. Note below = Item.fetchRequest() is the default value when no parameters are given such as loadItems(). */
+   
+   
     func loadItems() {
         
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title",ascending: true)
         
-//        itemArray = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+
         
-//ENTIRE SECTION BELOW IS NOT NEEDED WHEN USING REALM...
-//        /* We need to query our database and filter the results based on parent category that was selected. */
-//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-//        /* Now add the predicate to the request. But we coud possibly unwrap a nil value so we need optional binding with follows the commented out codelines below*/
-//        //        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate])
-//        //
-//        //        request.predicate = compoundPredicate
-//        if let additionalPredicate = predicate {
-//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-//        } else {
-//            request.predicate = categoryPredicate
-//        }
-//
-//
-//        do {
-//            itemArray =  try context.fetch(request)
-//        } catch {
-//            print("Error saving data from context \(error)")
-//        }
+
         tableView.reloadData()
     }
-    /* Now we are inheriting from SwipeTableView class*/
+    /* Now we are inheriting from SwipeTableView class. So the following indexpath gets passed in from the superclass*/
     
     override func updateModel(at indexPath: IndexPath) {
         if let item = todoItems?[indexPath.row] {

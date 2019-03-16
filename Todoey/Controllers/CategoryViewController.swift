@@ -50,7 +50,7 @@ class CategoryViewController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-/* We tap into the cell that gets created in our new superclass. Therefore the cell is now a SwipeCell*/
+/* We tap into the cell that gets created in our new superclass. Therefore the cell is now a SwipeCell created bythe SwipeTableViewController.swift defn.*/
 let cell = super.tableView(tableView, cellForRowAt: indexPath)
 /* Next we fill in the textfield with the name of the category if there is a category otherwise "No Categories Added Yet" is displayed in textfield. */
   cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added Yet"
@@ -105,8 +105,9 @@ let cell = super.tableView(tableView, cellForRowAt: indexPath)
 /*The above line calls all the TableView Datasource methods again. */
     }
     //MARK: Delete Data from Swipe
-    
+/* So now we are making a call to the updateModel func that we created in the superclass. */
     override func updateModel(at indexPath: IndexPath) {
+/*BUT because we have overrided the func we must make a direct call to the superclass updateModel as well.*/
         super.updateModel(at: indexPath)
         if let categoryForDeletion = self.categories?[indexPath.row]{
             do {
