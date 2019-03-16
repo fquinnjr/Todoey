@@ -40,44 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-/* Left over from CoreData */
-//    func applicationWillTerminate(_ application: UIApplication) {
-//
-//        self.saveContext()
-//    }
-    
-    // MARK: - Core Data stack
-    
-    // Container is a SQL database
-//    lazy var persistentContainer: NSPersistentContainer = {
-    
-//        let container = NSPersistentContainer(name: "DataModel")
-//        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//            if let error = error as NSError? {
-//
-//                fatalError("Unresolved error \(error), \(error.userInfo)")
-//            }
-//        })
-//        return container //returns value of container into persistentContainer var object
-//    }()
-//
-//    // MARK: - Core Data Saving support
-    
-//    // Saves the data (context) after our app has terminated
-//    // Context is the staging area for changes that can be undone or changed.
-//    func saveContext () {
-//        let context = persistentContainer.viewContext
-//        if context.hasChanges {
-//            do {
-//                try context.save() //Saves the context to the container for permanent storage
-//            } catch {
-//
-//                let nserror = error as NSError
-//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//            }
-//        }
-//    }
-
 
 
 }

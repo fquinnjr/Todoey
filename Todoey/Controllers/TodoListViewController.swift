@@ -212,7 +212,7 @@ class TodoListViewController: SwipeTableViewController {
 extension TodoListViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
+ /*Note that the filter takes an NSPredicate as it's input.  %@ is the argument that we will pass in.*/
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
        /* The one line above replaces all 4 of the following lines left over from CoreData methodology. */
         tableView.reloadData()

@@ -52,15 +52,17 @@ class CategoryViewController: SwipeTableViewController {
         
 /* We tap into the cell that gets created in our new superclass. Therefore the cell is now a SwipeCell*/
 let cell = super.tableView(tableView, cellForRowAt: indexPath)
+/* Next we fill in the textfield with the name of the category if there is a category otherwise "No Categories Added Yet" is displayed in textfield. */
   cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added Yet"
         
         return cell
     }
     
     //MARK: - TableView Delegate Methods
-    
+ /* This is what happens when we click on any of our cells. */
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
+/* The above segue takes us to our TodoListViewController. BUT we first create a new instance of our destinationVC and then set our destinationVC's selectedCategory to the category that was selected. (SEE... if let...  below...*/
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     
@@ -77,14 +79,10 @@ let cell = super.tableView(tableView, cellForRowAt: indexPath)
         }
 
     //MARK: - Data Manipulation Methods(Save,Load and Delete)
-    
+/*Next we pass in the new category that we created into the save function. */
     func save(category: Category) {
- /*We pass in the new Category that was created into the save function*/
+ /*The write method commits changes to our Realm. The changes we want to make is we want to add our new cayegory to the Realm. */
         do {
- /* old CoreData method to commit to permanent storage...
-                       try context.save()
-             But now we use our Realm persistent data store method.*/
-            
             try realm.write {
             realm.add(category)
             }
@@ -131,22 +129,16 @@ let cell = super.tableView(tableView, cellForRowAt: indexPath)
         var textField = UITextField()
         
         let alert = UIAlertController(title: "Add New Category", message: "", preferredStyle: .alert)
-        
+ /* Next when we click on the add button then we create a new category object. */
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             
-  /*   We are no longer using CoreData so we don't need to save to a context like we did before as follows...
-             let newCategory = Category(context: self.context) .
-             Now it is as so... simply assign as a category object. */
+  /*  simply assign as a category object. */
             let newCategory = Category()
             
- /* Name is now initialized in the Category.swift file. */
+ /* name is now initialized in the Category.swift file. */
             newCategory.name = textField.text!
             
-/* In CoreData we grab a reference to the category and then add it to the array.
-             But we don't need append with realm because the Result type is an autoupdating container type. */
-           // self.categories.append(newCategory)
-            
-            /* saveCategories was previously used to save the context (we don't need context with Realm) */
+           
             self.save(category: newCategory)
     /*The save function above uses the write and add methods which are Realm methods. */
             
