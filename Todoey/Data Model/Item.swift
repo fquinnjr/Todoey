@@ -17,6 +17,7 @@ class Item: Object {
     @objc dynamic var done : Bool = false
 /*  Linking Objects are auto linking containers that represent 0 or more objects that are linked to its owning model object through a property relationship. This is basically the inverse relationship of items. */
     @objc dynamic var dateCreated : Date?
+    
     /*The following defines the inverse relationship that links each item back to a parent category. and we specify the type of the destination of the link which is Category, and we also specify the property name of the inverse relationship which is "items" and that relates to... let items = List<Item>()... in the Category.swift file. */
     var parentCategory = LinkingObjects(fromType: Category.self, property: "items"
     )

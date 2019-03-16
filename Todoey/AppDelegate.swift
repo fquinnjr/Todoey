@@ -11,6 +11,7 @@ import UIKit
 import RealmSwift
 
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -46,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }
     
     // MARK: - Core Data stack
+    
     // Container is a SQL database
 //    lazy var persistentContainer: NSPersistentContainer = {
     
@@ -60,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }()
 //
 //    // MARK: - Core Data Saving support
+    
 //    // Saves the data (context) after our app has terminated
 //    // Context is the staging area for changes that can be undone or changed.
 //    func saveContext () {

@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
   /* We initialize a new Realm object, which serves as an access point to our Realm database */
     let realm = try! Realm()
     
@@ -28,6 +28,7 @@ class CategoryViewController: UITableViewController {
         super.viewDidLoad()
  /*We load up all the categories that we currently have. (See loadCategories function.)*/
         loadCategories()
+        
     }
     
     
@@ -41,16 +42,19 @@ class CategoryViewController: UITableViewController {
        return categories?.count ?? 1
 /*The above states that if categories is Not nil then return count otherwise return 1. So then our tableview would have only one row. This syntax is referred to as the Nil Coalescing Operator. ?? */
     }
+//   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
+//        cell.delegate = self
+//        return cell
+//    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+/* We tap into the cell that gets created in our new superclass. Therefore the cell is now a SwipeCell*/
+let cell = super.tableView(tableView, cellForRowAt: indexPath)
+  cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added Yet"
         
-        
-        cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet."
-   /*The above states that if categories is Not nil then return the name string of the item at the indexpath otherwise return "No Categories added yet." This is another example of using the Nil Coalescing Operator. ?? */
         return cell
-        
     }
     
     //MARK: - TableView Delegate Methods
@@ -66,13 +70,13 @@ class CategoryViewController: UITableViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categories?[indexPath.row]
-            /*note lowercase local indewPath above, NOT IndexPath. Note also that categories is now an optional ? from changes made above. */
+            /*note lowercase local indexPath above, NOT IndexPath. Note also that categories is now an optional ? from changes made above. */
         }
         
         
         }
 
-    //MARK: - Data Manipulation Methods
+    //MARK: - Data Manipulation Methods(Save,Load and Delete)
     
     func save(category: Category) {
  /*We pass in the new Category that was created into the save function*/
@@ -102,13 +106,20 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
 /*The above line calls all the TableView Datasource methods again. */
     }
-//previous code from CoreData was used above instead of Realm.
-//        let request : NSFetchRequest<Category> = Category.fetchRequest()
-//        do {
-//            categories = try context.fetch(request)
-//        } catch {
-//            print("Error loading Categories \(error)")
-//        }
+    //MARK: Delete Data from Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        super.updateModel(at: indexPath)
+        if let categoryForDeletion = self.categories?[indexPath.row]{
+            do {
+                try realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("Error deleting category, \(error)")
+            }
+        }
+    }
        
     
     
@@ -153,3 +164,4 @@ class CategoryViewController: UITableViewController {
     }
     
 }
+

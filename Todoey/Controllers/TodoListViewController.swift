@@ -11,9 +11,10 @@ import UIKit
 
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     /* We need to initialize itemArray with all of the items that belong to the category that was selected (for old CoreData method), BUT now for Realm we must give the array the Results datatype containing an array of item objects.
-     We will change the name itemArray because it is now a Results container . */
+     We will change the name itemArray because it is now a Results container.
+     So we replace... var todoItems = [Item]()...with the following...  */
     var todoItems : Results<Item>?
     
     let realm = try! Realm()
@@ -47,9 +48,9 @@ class TodoListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        
+   /*Now that we are inheriting from the SwipeViewCell so we need to use the superclass's cell instead so the following is taken out...
+       let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) ...and replaced with...*/
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         /* We now use optional binding below */
         
         if let item = todoItems?[indexPath.row]{
@@ -68,12 +69,12 @@ class TodoListViewController: UITableViewController {
     //MARK: - TableView Delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //MARK: Realm ...New way of persistent stortage
+        //MARK: Realm ...New way of persistent storage
 /* if let makes sure todoItems is not nil. If not nil then the row item is assigned to item variable , then we toggle the done boolean property to be the opposite of what it was before and write it to the realm persistent storage.*/
         if let item = todoItems?[indexPath.row] {
             do {
                 try realm.write {
-                    
+                 
                 item.done = !item.done
                 }
             } catch {
@@ -189,8 +190,19 @@ class TodoListViewController: UITableViewController {
 //        }
         tableView.reloadData()
     }
+    /* Now we are inheriting from SwipeTableView class*/
     
-    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = todoItems?[indexPath.row] {
+            do {
+           try realm.write {
+                realm.delete(item)
+            }
+            } catch {
+              print("Error deleting Item, \(error)")
+        }
+    }
+    }
 }
 //MARK: Search bar methods
 
