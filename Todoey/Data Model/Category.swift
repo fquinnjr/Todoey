@@ -13,7 +13,8 @@ class Category : Object {
     /*Remember that dynamic above means that we can monitor for changes in the property while the app is running.*/
     
     @objc dynamic var name : String = ""
-    /*    let items = List<Item>... is the forward relationship. So the item constant is equal to a List container of Item objects. Look inside the Category.swift file and you will see that Item is a class that also inherits from the Object class which means it is a Realm object.*/
+    /*    let items = List<Item>... is the forward relationship. So the item constant is equal to a List container of Item objects. Look inside the Item.swift file and you will see that Item is a class that also inherits from the Object class which means it is a Realm object.*/
+    @objc dynamic var colour : String = ""
     let items  = List<Item>()
 }
     /* The inverse relationship of Category is defined in the Item.swift file and we create the relationship ourselves. */

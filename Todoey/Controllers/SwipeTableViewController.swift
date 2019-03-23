@@ -8,7 +8,7 @@
 
 import UIKit
 import SwipeCellKit
-
+import ChameleonFramework
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
 
     override func viewDidLoad() {
@@ -24,7 +24,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SwipeTableViewCell
         
         cell.delegate = self
-        
+
         return cell
         
     }
